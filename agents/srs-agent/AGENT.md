@@ -1,11 +1,11 @@
 ---
-name: problem-based-srs
+name: srs-agent
 description: Complete Problem-Based Software Requirements Specification methodology following Gorski & Stadzisz research. Use when you need to perform requirements engineering from business problems to functional requirements with full traceability.
 license: MIT
 metadata:
   author: rafael-gorski
   version: "1.3"
-  methodology: problem-based-srs
+  methodology: srs-agent
 ---
 
 # Problem-Based SRS Agent
@@ -79,6 +79,27 @@ This agent orchestrates the following skills:
 ### ⚠ File Creation Rule: ONE FILE AT A TIME
 
 **NEVER create multiple artifact files in parallel.** Always create files **one at a time, sequentially** — wait for each file to be saved before creating the next one. Batch/parallel file creation causes JSON serialization errors in tool calls when the combined content is too large.
+
+### Special Trigger: "srs-agent use disbursement mcp"
+
+When user says **"srs-agent use disbursement mcp"** or similar disbursement-related trigger:
+
+1. **Ask for API name**: Request the specific API/disbursement process name (e.g., "srs for disbursement", "loan disbursement", "fund transfer")
+2. **Call MCP tool**: Use `dispersion_mcp_query` tool to fetch real-time data, rules, and constraints from Dispersion NCP
+3. **Synthesize data**: Combine MCP response with user input
+4. **Generate SRS**: Create full SRS (Context, Problems, Needs, Requirements) based **only** on the combined MCP data + user input
+5. **Follow standard flow**: Still use Steps 0-5 but populate with MCP-derived information
+
+**Example flow:**
+```
+User: "srs-agent use disbursement mcp"
+Agent: "Which disbursement API or process should I analyze? (e.g., loan disbursement, fund transfer, etc.)"
+User: "loan disbursement"
+Agent: [Calls dispersion_mcp_query with "loan disbursement"]
+Agent: [Receives MCP data: rules, constraints, current state]
+Agent: [Starts Step 0 with MCP-derived business context]
+... continues through Steps 1-5
+```
 
 ### Starting Fresh
 When user provides business context or problem description:
@@ -185,5 +206,5 @@ Use zigzag-validator skill to check existing artifacts without generating new on
 ## Examples
 
 For complete walkthroughs, see:
-- [CRM Example](../skills/problem-based-srs/references/crm-example.md) — Business domain
-- [MicroER Example](../skills/problem-based-srs/references/microer-example.md) — Technical domain
+- [CRM Example](../skills/srs-agent/references/crm-example.md) — Business domain
+- [MicroER Example](../skills/srs-agent/references/microer-example.md) — Technical domain
