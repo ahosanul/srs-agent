@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Problem-Based SRS - A lightweight, prompt-first methodology for software requirements specification designed for AI agents">
+    <title>Problem-Based SRS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        header p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        nav {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 1rem;
+        }
+        
+        nav li {
+            margin: 0 1rem;
+        }
+        
+        nav a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: #764ba2;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        section {
+            background: white;
+            margin: 2rem 0;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+        
+        h3 {
+            color: #764ba2;
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-card h3 {
+            color: #667eea;
+            margin-top: 0;
+        }
+        
+        .step-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .step {
+            background: linear-gradient(to right, #ff6b6b, #ee5a6f);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            position: relative;
+        }
+        
+        .step:nth-child(2) {
+            background: linear-gradient(to right, #4ecdc4, #44a08d);
+        }
+        
+        .step:nth-child(3) {
+            background: linear-gradient(to right, #45b7d1, #2c97b5);
+        }
+        
+        .step:nth-child(4) {
+            background: linear-gradient(to right, #96ceb4, #7fb99e);
+        }
+        
+        .step:nth-child(5) {
+            background: linear-gradient(to right, #ffeaa7, #fdcb6e);
+            color: #333;
+        }
+        
+        .step h4 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        
+        .cta-section {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 8px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 1rem 0.5rem;
+            transition: transform 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin: 0.25rem;
+        }
+
+        .diagram {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin: 1.5rem auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: #fff;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav li {
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📄 Problem-Based SRS</h1>
+        <p>Stop building the wrong thing. AI-guided requirements engineering that starts with real customer problems, helping engineers discover what to build, reflect on business impact, and maximize the value of their work.</p>
+        <div style="margin-top: 1rem;">
+            <span class="badge">Version 1.1</span>
+            <span class="badge">AgentSkills Standard</span>
+            <span class="badge">GitHub Copilot Compatible</span>
+            <span class="badge">MIT License</span>
+        </div>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#methodology">Methodology</a></li>
+            <li><a href="#quickstart">Quick Start</a></li>
+            <li><a href="#features">Usage Patterns</a></li>
+            <li><a href="#resources">Resources</a></li>
+            <li><a href="#release">Release 1.1</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <section id="overview">
+            <h2>🎯 Overview</h2>
+            <p>An <strong><a href="https://agentskills.io" style="color: #667eea;">Agent Skill</a></strong> for AI-guided software requirements engineering. Works with <strong>GitHub Copilot</strong>, <strong>Claude Code</strong>, and other AI agents.</p>
+
+            <h3>⚡ The Problem We Solve</h3>
+            <p>Have you ever spent weeks building a feature, only to discover it didn't solve the actual problem? <strong>You're not alone.</strong> The #1 cause of software project failures is building what stakeholders <em>asked for</em> instead of what they actually <em>need</em>.</p>
+
+            <div style="background: #fff3cd; padding: 1.5rem; border-left: 4px solid #ffc107; margin: 1.5rem 0; border-radius: 4px;">
+                <strong>Real Example:</strong><br>
+                <strong>Stakeholder says:</strong> "We need a reporting dashboard with 20 charts."<br>
+                <strong>You build it:</strong> 3 weeks of work.<br>
+                <strong>Reality:</strong> They only use 3 charts. The real problem was <em>slow data access</em>, not visualization.<br><br>
+                <strong>Result:</strong> Wasted effort, missed opportunity, frustrated team.
+            </div>
+
+            <h3>💡 How It Helps</h3>
+            <p>Your AI coding assistant guides you through a proven 5-step process. You start with real business problems and end with traceable, justified requirements — so every feature you build solves an actual need.</p>
+
+            <p style="margin-top: 1rem;"><strong>Spend 30 minutes upfront with your AI agent to save weeks of building the wrong thing.</strong></p>
+
+            <h3 style="margin-top: 2rem;">🎯 What You'll Get</h3>
+            <div class="feature-grid" style="margin-top: 1.5rem;">
+                <div class="feature-card">
+                    <h3>🔍 Discover Real Problems</h3>
+                    <p>Identify what customers actually need before writing code</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🎯 Align with Impact</h3>
+                    <p>Every line of code traces back to a problem it solves</p>
+                </div>
+                <div class="feature-card">
+                    <h3>⚡ Reduce Rework</h3>
+                    <p>Catch misunderstandings in minutes, not after weeks</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🚀 Ship with Confidence</h3>
+                    <p>Know exactly why each feature matters and to whom</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🤖 AI-Guided Process</h3>
+                    <p>Works with GitHub Copilot, Claude, and other AI agents</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📊 Clear Priorities</h3>
+                    <p>Know what's critical vs nice-to-have based on problem severity</p>
+                </div>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 1rem; border-left: 4px solid #667eea; margin: 1.5rem 0;">
+                <strong>Research-Backed:</strong> Based on peer-reviewed methodology by <strong>Gorski and Stadzisz</strong>, published in academic research on software requirements specification.<br>
+                <strong>DOI:</strong> <a href="https://www.periodicosibepes.org.br/index.php/reinfo/article/view/2230" style="color: #667eea;">10.21529/RESI.2016.1502002</a>
+            </div>
+        </section>
+        
+        <section id="methodology">
+            <h2>📊 The 5-Step Methodology</h2>
+            <p>A systematic process that ensures you discover problems first, then design solutions. Each step builds on the previous to maximize your impact:</p>
+
+            <img class="diagram" src="img/5-step-process.png" alt="5-step methodology flowchart">
+
+            <div class="step-flow">
+                <div class="step">
+                    <h4>Step 1: Customer Problems (CP)</h4>
+                    <p>Identify the <strong>WHY</strong> - understand business pain and classify by problem class (Obligation / Expectation / Hope — roughly must-have / should-have / could-have)</p>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem;">✅ <strong>You get:</strong> Clear focus on what matters most, justification for every feature</p>
+                    <span class="badge">/customer-problems</span>
+                </div>
+
+                <div class="step">
+                    <h4>Step 2: Software Glance</h4>
+                    <p>Sketch high-level solution approach - components, interfaces, boundaries</p>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem;">✅ <strong>You get:</strong> Shared understanding with team, architectural direction</p>
+                    <span class="badge">/software-glance</span>
+                </div>
+
+                <div class="step">
+                    <h4>Step 3: Customer Needs (CN)</h4>
+                    <p>Define the <strong>WHAT</strong> - outcomes the system must deliver to solve the problems</p>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem;">✅ <strong>You get:</strong> Success criteria, measurable goals, scope boundaries</p>
+                    <span class="badge">/customer-needs</span>
+                    <span class="badge">/zigzag-validator (validate)</span>
+                </div>
+
+                <div class="step">
+                    <h4>Step 4: Software Vision</h4>
+                    <p>Detail architecture, features, constraints, and technical approach</p>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem;">✅ <strong>You get:</strong> Technical roadmap, stakeholder alignment, design decisions</p>
+                    <span class="badge">/software-vision</span>
+                </div>
+
+                <div class="step">
+                    <h4>Step 5: Functional Requirements (FR)</h4>
+                    <p>Define the <strong>HOW</strong> - detailed, testable requirements for implementation</p>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem;">✅ <strong>You get:</strong> Implementation checklist, acceptance criteria, full traceability</p>
+                    <span class="badge">/functional-requirements</span>
+                    <span class="badge">/zigzag-validator (validate)</span>
+                </div>
+            </div>
+
+            <div style="background: #e8f5e9; padding: 1.5rem; border-left: 4px solid #4caf50; margin: 2rem 0; border-radius: 4px;">
+                <strong>💡 Why This Order Matters:</strong><br>
+                Starting with problems (WHY) before solutions (HOW) ensures you build the right thing. Engineers who skip problem discovery often build features that look good but don't solve actual needs.
+            </div>
+            
+            <h3 style="margin-top: 2rem;">🔄 Development Workflow Integration</h3>
+            <img class="diagram" src="img/development-workflow.png" alt="Development workflow integration diagram">
+            
+            <h3>🔗 Artifact Traceability</h3>
+            <p>Every requirement traces back to ensure it solves real problems. Each artifact is interconnected:</p>
+            <img class="diagram" src="img/artifact-traceability.png" alt="Artifact traceability diagram">
+            
+            <h3>📊 Problem Classification</h3>
+            <p>Customer Problems are classified by severity to prioritize what must be solved:</p>
+            <img class="diagram" src="img/problem-classification.png" alt="Problem classification diagram">
+            <ul style="margin-top: 1rem; line-height: 2;">
+                <li><strong>Obligation (Must/Required):</strong> High priority - severe consequences if unsolved (legal/contractual)</li>
+                <li><strong>Expectation (Should/Expects):</strong> Medium priority - moderate impact if unsolved (business goals)</li>
+                <li><strong>Hope (Wishes):</strong> Low priority - minimal penalty if unsolved (improvements)</li>
+            </ul>
+        </section>
+        
+        <section id="quickstart">
+            <h2>🚀 Quick Start for Engineers</h2>
+
+            <h3>Step 1: Install the Skill</h3>
+            <p>Ask your AI assistant to install it:</p>
+            <pre><code>Install the Problem-Based SRS skill from RafaelGorski/Problem-Based-SRS</code></pre>
+
+            <p style="margin-top: 1rem;">Many AI agents (including GitHub Copilot and Claude Code) can install AgentSkills when you ask them, but the exact installation steps vary by agent.</p>
+            <p>If your agent does not install it automatically, follow the <a href="https://github.com/RafaelGorski/Problem-Based-SRS#installation-options">Installation Options</a> in the README to copy the skill manually or use the AgentSkills CLI.</p>
+
+            <h3>Step 2: Start Your First Session</h3>
+            
+            <p>Use these commands in VS Code, Visual Studio, JetBrains IDEs, or Claude:</p>
+
+            <pre><code>/problem-based-srs        # Full methodology - start here for new projects
+/business-context         # Business Context - establish project principles
+/customer-problems        # Customer Problems - identify business pain
+/software-glance          # Software Glance - sketch solution approach
+/customer-needs           # Customer Needs - define required outcomes
+/software-vision          # Software Vision - detail architecture
+/functional-requirements  # Functional Requirements - specify implementation
+/zigzag-validator         # Validate traceability - quality check
+/complexity-analysis      # Optional: Axiomatic Design analysis</code></pre>
+            
+            <h3>Compatibility</h3>
+            <p>Works with any AI agent that supports the <a href="https://agentskills.io" style="color: #667eea;">AgentSkills standard</a>:</p>
+            
+            <ul style="margin-top: 1rem; line-height: 2;">
+                <li><strong>GitHub Copilot:</strong> Auto-discovers from the skills directory</li>
+                <li><strong>Claude Code:</strong> Auto-discovers when this repository is in your workspace</li>
+                <li><strong>Claude.ai:</strong> Upload the skill from <code>skills/problem-based-srs/</code> (including the references folder)</li>
+                <li><strong>Other LLMs</strong> (ChatGPT, DeepSeek, Llama, etc.): Copy the skill content as context</li>
+            </ul>
+            
+            <h3>For New Features</h3>
+            <p>Simply describe your business context or problem:</p>
+
+            <pre><code>I need to create requirements for [feature name]
+
+Business Context: [describe current situation and problem]
+
+Example:
+"I need requirements for an inventory management system.
+Our warehouse tracks everything in spreadsheets and loses
+$50k/month due to errors."</code></pre>
+
+            <p style="margin-top: 1rem;">The AI will automatically:</p>
+            <ul style="line-height: 2;">
+                <li>✅ Guide you through all 5 steps</li>
+                <li>✅ Ask clarifying questions to uncover real problems</li>
+                <li>✅ Help you prioritize by problem severity</li>
+                <li>✅ Ensure traceability from problems to requirements</li>
+                <li>✅ Save your work as structured documents</li>
+            </ul>
+
+            <h3 style="margin-top: 2rem;">Common Scenarios</h3>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <h4 style="margin-top: 0; color: #667eea;">🆕 New Feature</h4>
+                    <p style="margin-bottom: 0.5rem;"><strong>Use:</strong> <code>/problem-based-srs</code></p>
+                    <p style="font-size: 0.9rem;">Start from scratch and go through all 5 steps with your AI guiding you.</p>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <h4 style="margin-top: 0; color: #667eea;">🔍 Review Existing Requirements</h4>
+                    <p style="margin-bottom: 0.5rem;"><strong>Use:</strong> <code>/functional-requirements</code> then <code>/zigzag-validator</code></p>
+                    <p style="font-size: 0.9rem;">Validate that requirements trace back to real problems.</p>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <h4 style="margin-top: 0; color: #667eea;">💡 Stakeholder Proposes Solution</h4>
+                    <p style="margin-bottom: 0.5rem;"><strong>Use:</strong> <code>/customer-problems</code></p>
+                    <p style="font-size: 0.9rem;">Dig deeper to uncover the actual problem they're trying to solve.</p>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <h4 style="margin-top: 0; color: #667eea;">✅ Quality Check</h4>
+                    <p style="margin-bottom: 0.5rem;"><strong>Use:</strong> <code>/zigzag-validator</code></p>
+                    <p style="font-size: 0.9rem;">Verify all requirements trace to customer needs and problems.</p>
+                </div>
+            </div>
+
+            <div style="background: #e3f2fd; padding: 1.5rem; border-left: 4px solid #2196f3; margin: 2rem 0; border-radius: 4px;">
+                <strong>💡 Pro Tip:</strong> The skill works with any AI agent that supports the <a href="https://agentskills.io" style="color: #667eea;">AgentSkills</a> standard (GitHub Copilot, Claude Code, Claude.ai, etc.). Just upload the skill files or let your AI auto-discover them from your workspace.
+            </div>
+        </section>
+        
+        <section id="features">
+            <h2>💡 Real-World Use Cases</h2>
+
+            <p>How engineers use Problem-Based SRS in different situations:</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🆕 New Feature Development</h3>
+                    <p><strong>Situation:</strong> Product manager asks for "a dashboard with analytics"</p>
+                    <p><strong>Your approach:</strong> Use <code>/customer-problems</code> to discover the real problem - turns out they need "real-time alerts when KPIs drop below threshold"</p>
+                    <p><strong>Result:</strong> Build the right thing (alerting) not the requested thing (dashboard)</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🔍 Requirements Refinement</h3>
+                    <p><strong>Situation:</strong> You inherited vague requirements from another team</p>
+                    <p><strong>Your approach:</strong> Use <code>/zigzag-validator</code> to validate traceability, identify gaps, then use <code>/customer-problems</code> to fill missing problems</p>
+                    <p><strong>Result:</strong> Clear, traceable requirements that justify every feature</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>💡 Problem Discovery</h3>
+                    <p><strong>Situation:</strong> Stakeholders propose technical solutions ("Use Redis cache!")</p>
+                    <p><strong>Your approach:</strong> Use <code>/customer-problems</code> with discovery mode to ask "What problem does this solve?"</p>
+                    <p><strong>Result:</strong> Uncover actual need (faster queries) and evaluate best solution</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>⚖️ Priority Negotiation</h3>
+                    <p><strong>Situation:</strong> Everything is "high priority" from stakeholders</p>
+                    <p><strong>Your approach:</strong> Use problem classification (Obligation/Expectation/Hope) to rank by severity</p>
+                    <p><strong>Result:</strong> Data-driven prioritization based on business impact</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>📋 Sprint Planning</h3>
+                    <p><strong>Situation:</strong> Converting user stories to technical tasks</p>
+                    <p><strong>Your approach:</strong> Use <code>/customer-needs</code> for acceptance criteria, <code>/functional-requirements</code> for implementation tasks</p>
+                    <p><strong>Result:</strong> Clear sprint goals with traceable work items</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>✅ Code Review Context</h3>
+                    <p><strong>Situation:</strong> Reviewing a PR and wondering "why this approach?"</p>
+                    <p><strong>Your approach:</strong> Check FR traceability to see which problem it solves</p>
+                    <p><strong>Result:</strong> Context-aware review focused on solving the actual problem</p>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 2rem;">🔧 Integration with Development Workflow</h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                <div>
+                    <h4 style="color: #667eea;">During Sprint Planning</h4>
+                    <ul style="line-height: 2;">
+                        <li>Use <code>/customer-problems</code> to capture user stories as customer problems</li>
+                        <li>Use <code>/customer-needs</code> to define acceptance criteria</li>
+                        <li>Use <code>/functional-requirements</code> to break down into technical requirements</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 style="color: #667eea;">During Feature Design</h4>
+                    <ul style="line-height: 2;">
+                        <li>Reference <code>/software-glance</code> for high-level approach</li>
+                        <li>Reference <code>/software-vision</code> for architectural decisions</li>
+                        <li>Use <code>/zigzag-validator</code> to ensure design addresses all needs</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 style="color: #667eea;">During Implementation</h4>
+                    <ul style="line-height: 2;">
+                        <li>Use functional requirements as your implementation checklist</li>
+                        <li>Trace each requirement back to CN and CP for context</li>
+                        <li>Update requirements if new problems discovered</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 style="color: #667eea;">During Code Review</h4>
+                    <ul style="line-height: 2;">
+                        <li>Verify implementation satisfies functional requirements</li>
+                        <li>Check requirements still trace to customer needs</li>
+                        <li>Validate no scope creep beyond identified problems</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section id="resources">
+            <h2>📚 Additional Resources</h2>
+            
+            <h3>Repository Structure</h3>
+            <p>This repository provides agents and skills in the <a href="https://agentskills.io" style="color: #667eea;">AgentSkills</a> format:</p>
+            
+            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                <h4 style="margin-top: 0; color: #667eea;">Agents</h4>
+                <p style="margin-bottom: 0.5rem;"><code>agents/problem-based-srs/</code> - Orchestrator agent for full methodology</p>
+            </div>
+            
+            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                <h4 style="margin-top: 0; color: #667eea;">Skills (Individual Steps)</h4>
+                <p style="margin-bottom: 0.5rem;">For GitHub Copilot, Claude Code, Claude.ai, and other AI agents:</p>
+                <ul style="line-height: 2;">
+                    <li><code>skills/problem-based-srs/</code> - Main orchestrator skill
+                        <ul style="margin-top: 0.5rem;">
+                            <li><code>references/crm-example.md</code> - Complete CRM walkthrough</li>
+                            <li><code>references/microer-example.md</code> - Energy system walkthrough</li>
+                        </ul>
+                    </li>
+                    <li><code>skills/customer-problems/</code> - Step 1: CP generation</li>
+                    <li><code>skills/software-glance/</code> - Step 2: Software Glance design</li>
+                    <li><code>skills/customer-needs/</code> - Step 3: CN specification</li>
+                    <li><code>skills/software-vision/</code> - Step 4: Software Vision design</li>
+                    <li><code>skills/functional-requirements/</code> - Step 5: FR/NFR generation</li>
+                    <li><code>skills/zigzag-validator/</code> - Traceability validation</li>
+                    <li><code>skills/complexity-analysis/</code> - <em>Optional:</em> Axiomatic Design analysis</li>
+                </ul>
+            </div>
+            
+            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                <h4 style="margin-top: 0; color: #667eea;">Additional Documentation</h4>
+                <ul style="line-height: 2;">
+                    <li><code>docs/</code> - Full methodology and research paper</li>
+                    <li><code>README.md</code> - Quick start guide and examples</li>
+                    <li><code>CONTRIBUTING.md</code> - Contribution guidelines</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section class="cta-section">
+            <h2 style="color: white; border: none;">Get Started Today</h2>
+            <p style="font-size: 1.15rem; margin: 1.5rem 0;">Start building the right thing with AI-guided requirements.</p>
+            <a href="https://github.com/RafaelGorski/Problem-Based-SRS" class="cta-button">View on GitHub</a>
+            <a href="https://github.com/RafaelGorski/Problem-Based-SRS/tree/main/skills" class="cta-button">View Skills</a>
+            <a href="https://github.com/RafaelGorski/Problem-Based-SRS/releases/tag/v1.1" class="cta-button">Release 1.1</a>
+        </section>
+        
+        <section id="release">
+            <h2>🎉 Release 1.1 (February 2026)</h2>
+            <p>We're excited to announce version 1.1 with Complexity Analysis and enhanced methodology features!</p>
+            
+            <h3>🆕 What's New in 1.1</h3>
+            <ul style="line-height: 2; margin-top: 1rem;">
+                <li><strong>Complexity Analysis (<code>/complexity-analysis</code>):</strong> Optional Axiomatic Design-based quality analysis for critical systems
+                    <ul style="margin-top: 0.5rem;">
+                        <li>Independence axiom analysis (coupled/redundant/ideal specifications)</li>
+                        <li>Design matrix evaluation</li>
+                        <li>Information content assessment</li>
+                    </ul>
+                </li>
+                <li><strong>Case Study Examples:</strong> Condensed walkthroughs for learning
+                    <ul style="margin-top: 0.5rem;">
+                        <li><code>crm-example.md</code> - CRM system from business context to requirements</li>
+                        <li><code>microer-example.md</code> - Renewable energy system (technical domain)</li>
+                    </ul>
+                </li>
+                <li><strong>C/P Completeness Markers:</strong> Enhanced traceability with Complete/Partial indicators</li>
+                <li><strong>Problem Decomposition Guidance:</strong> When and how to break down Customer Problems</li>
+                <li><strong>Expanded CN Outcome Classes:</strong> Detailed examples for Information, Control, Construction, Entertainment</li>
+                <li><strong>Agile Integration Patterns:</strong> Sprint 0 planning, per-feature CP→CN→FR chains, minimal viable SRS</li>
+            </ul>
+            
+            <h3 style="margin-top: 2rem;">📦 Included from 1.0</h3>
+            <ul style="line-height: 2; margin-top: 1rem;">
+                <li><strong>AgentSkills Format:</strong> Full compatibility with GitHub Copilot, Claude Code, Claude.ai, and other AI agents</li>
+                <li><strong>Complete 5-Step Methodology:</strong> Customer Problems → Software Glance → Customer Needs → Software Vision → Functional Requirements</li>
+                <li><strong>Traceability Validation:</strong> ZigZag validator ensures all requirements trace back to real business problems</li>
+                <li><strong>Python Test Infrastructure:</strong> 57+ tests validating YAML, markdown structure, and traceability IDs</li>
+                <li><strong>Comprehensive Documentation:</strong> Detailed reference guides for each methodology step</li>
+            </ul>
+            
+            <p style="margin-top: 1.5rem;">View the full <a href="https://github.com/RafaelGorski/Problem-Based-SRS/blob/main/CHANGELOG.md" style="color: #667eea;">changelog</a> for details.</p>
+        </section>
+    </div>
+    
+    <footer>
+        <p>&copy; 2026 Problem-Based SRS | Based on research by Gorski and Stadzisz</p>
+        <p style="margin-top: 0.5rem;">Licensed under the MIT License</p>
+    </footer>
+</body>
+</html>

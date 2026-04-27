@@ -1,0 +1,38 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 1.3)'
+        required: true
+        type: string
+      release_name:
+        description: 'Release name (e.g., Enhanced Traceability)'
+        required: true
+        type: string
+      release_body:
+        description: 'Release notes (markdown format, from CHANGELOG.md)'
+        required: true
+        type: string
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Create Release v${{ inputs.version }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: 'v${{ inputs.version }}',
+              target_commitish: 'main',
+              name: '🎉 Version ${{ inputs.version }} - ${{ inputs.release_name }}',
+              body: `${{ inputs.release_body }}`,
+              draft: false,
+              prerelease: false
+            });
