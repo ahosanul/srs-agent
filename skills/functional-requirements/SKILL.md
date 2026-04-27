@@ -302,9 +302,54 @@ Construction and implementation details belong in separate design documents:
 ├── non-functional-requirements/ # NFR files (WHAT - no code)
 └── design/                      # Construction details (HOW)
     ├── architecture.md          # System architecture
-    ├── data-model.md            # Database schemas
+    ├── data-model.md            # Database schemas with ERD
     ├── api-specification.md     # API endpoints
     └── implementation-notes/    # Technical notes per FR
+
+## Design Documentation Requirements (CRITICAL)
+
+### data-model.md Must Include:
+
+**ENTITY RELATIONSHIP DIAGRAM (ERD):**
+- Complete Mermaid ERD showing all entities and relationships
+- Cardinality notation (1:1, 1:N, M:N) for each relationship
+- Primary keys, foreign keys, and indexes clearly marked
+
+**DATABASE TABLES:**
+For EACH table involved in the process:
+- Table name and purpose
+- ALL fields with:
+  - Field name
+  - Data type (VARCHAR, INT, DECIMAL, DATE, TIMESTAMP, etc.)
+  - Constraints (NOT NULL, UNIQUE, DEFAULT, etc.)
+  - Primary/Foreign key designation
+  - Description of what data the field holds
+
+**DATA MODIFICATIONS BY PHASE:**
+For each business phase/process step:
+- Which tables are INSERTED/UPDATED/DELETED
+- Specific fields that change
+- Conditions that trigger each modification
+- Calculation formulas for computed fields
+- Before and after state descriptions
+
+**CALCULATION DOCUMENTATION:**
+For ALL pre-storage calculations:
+- Installment amount calculation: formula, variables, rounding rules
+- Next installment date: business rules, holiday handling, weekend adjustments
+- Interest/fee computations: rates, proration methods, compounding rules
+- Balance updates: running balance logic, payment application order
+- Status transitions: state machine rules, trigger conditions
+
+### implementation-notes/ Per FR:
+
+Each FR gets a corresponding implementation note file that includes:
+- Detailed algorithm description (no code, but step-by-step logic)
+- Data flow: input sources, transformations, output destinations
+- Database operations: which tables, which fields, what operations
+- Business rule enforcement: validation logic, error conditions
+- Edge cases and exception handling
+- Performance considerations if applicable
 ```
 
 ---
@@ -403,6 +448,14 @@ Before finalizing, verify:
 - [ ] NFRs have measurable targets (not vague terms)
 - [ ] No implementation/design details in requirements (WHAT not HOW)
 - [ ] No code snippets or programming examples in FR/NFR files
+- [ ] **NO METHOD REFERENCES** in any output (describe business logic instead)
+- [ ] **ALL CALCULATIONS** documented (installment amounts, dates, interest, fees)
+- [ ] **DESIGN FOLDER** created with architecture.md, data-model.md, api-specification.md
+- [ ] **DATA-MODEL.MD** includes complete ERD with all entities and relationships
+- [ ] **DATA-MODEL.MD** lists ALL database tables with ALL fields (name, type, constraints)
+- [ ] **DATA-MODEL.MD** documents which tables are modified in each phase
+- [ ] **IMPLEMENTATION-NOTES** created per FR with detailed algorithms
+- [ ] **PHASE TABLES** show Order, Rule with business logic descriptions (not method calls)
 
 ---
 
@@ -417,6 +470,11 @@ Before finalizing, verify:
 | All FRs in one file | Each FR in separate file for independent development |
 | Vague NFR: "good performance" | Measurable NFR: "< 2 second response time" |
 | Code snippet in FR file | Reference design docs for implementation details |
+| Method reference: `service.isBusy()` | Business logic: "System checks if process is currently busy" |
+| Missing calculations | Document ALL formulas: installment amount, dates, interest |
+| No ERD in data-model.md | Complete Mermaid ERD with all entities and relationships |
+| Partial table definitions | ALL tables with ALL fields (name, type, constraints) |
+| Unclear data modifications | Phase-by-phase table updates with conditions |
 
 ---
 
@@ -437,10 +495,20 @@ After completing this step:
    ├── _index.md (N NFRs total)
    └── NFR-001-*.md
 
+📁 Created: design/                    # NEW - Construction details
+   ├── architecture.md                # System architecture
+   ├── data-model.md                  # ERD + all tables with all fields
+   ├── api-specification.md           # API endpoints
+   └── implementation-notes/          # Per-FR technical notes
+       ├── FR-001-implementation.md   # Calculations, data flow, DB ops
+       ├── FR-002-implementation.md
+       └── ...
+
 📁 Updated: traceability-matrix.md
 
 → MANDATORY: Run zigzag-validator skill for full chain verification
 → Engineers can now pick individual FR files to implement
+→ Implementation details are in design/ folder, NOT in FR files
 ```
 
 ---
@@ -449,6 +517,6 @@ After completing this step:
 
 Based on Problem-Based SRS methodology (Gorski & Stadzisz, 2016)
 
-**Version:** 1.2  
+**Version:** 1.3  (Updated with design documentation requirements)  
 **Step:** 5 of 5  
 **Validation:** zigzag-validator skill
